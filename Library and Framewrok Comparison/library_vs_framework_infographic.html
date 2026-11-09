@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library vs. Framework Architectural Deep-Dive Infographic</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            lib: {
+              light: '#0284c7',
+              DEFAULT: '#06b6d4',
+              dark: '#0891b2',
+              glow: 'rgba(6, 182, 212, 0.25)',
+              bg: 'rgba(6, 182, 212, 0.08)'
+            },
+            fw: {
+              light: '#9333ea',
+              DEFAULT: '#a855f7',
+              dark: '#7e22ce',
+              glow: 'rgba(168, 85, 247, 0.25)',
+              bg: 'rgba(168, 85, 247, 0.08)'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+            mono: ['Fira Code', 'JetBrains Mono', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Google Fonts & FontAwesome Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0f172a;
+      color: #f8fafc;
+    }
+    
+    .glow-lib {
+      box-shadow: 0 0 25px -5px rgba(6, 182, 212, 0.3);
+    }
+    
+    .glow-fw {
+      box-shadow: 0 0 25px -5px rgba(168, 85, 247, 0.3);
+    }
+
+    .border-glow-lib {
+      border-color: rgba(6, 182, 212, 0.5);
+    }
+
+    .border-glow-fw {
+      border-color: rgba(168, 85, 247, 0.5);
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+
+    /* Animation pulse dots */
+    @keyframes pulse-fast {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.95); }
+    }
+    .animate-pulse-fast {
+      animation: pulse-fast 1.8s infinite ease-in-out;
+    }
+
+    /* Flow lines animation */
+    @keyframes flow-right {
+      0% { stroke-dashoffset: 24; }
+      100% { stroke-dashoffset: 0; }
+    }
+    .flow-line {
+      stroke-dasharray: 6;
+      animation: flow-right 1s linear infinite;
+    }
+
+    @media print {
+      body {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .print-break-inside-avoid {
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100 antialiased selection:bg-cyan-500 selection:text-slate-950 pb-16">
+
+  <!-- TOP BAR / HEADER NAV -->
+  <header class="sticky top-0 z-50 backdrop-blur-md bg-slate-950/80 border-b border-slate-800 no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center text-slate-950 font-black text-lg shadow-lg">
+          <i class="fa-solid fa-code-compare text-white text-sm"></i>
+        </div>
+        <div>
+          <span class="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-sky-300 to-purple-400 text-lg sm:text-xl tracking-tight">
+            Dev Architecture Matrix
+          </span>
+          <span class="text-xs text-slate-400 hidden sm:inline-block ml-2 border-l border-slate-700 pl-2">Complete Deep-Dive</span>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-2 sm:space-x-4">
+        <!-- Filter Controls -->
+        <div class="bg-slate-900 border border-slate-800 rounded-lg p-1 flex text-xs">
+          <button id="view-all-btn" onclick="setViewFilter('all')" class="px-3 py-1.5 rounded-md font-medium transition-all bg-slate-800 text-white shadow-sm">All</button>
+          <button id="view-lib-btn" onclick="setViewFilter('lib')" class="px-3 py-1.5 rounded-md font-medium transition-all text-slate-400 hover:text-cyan-400">Library</button>
+          <button id="view-fw-btn" onclick="setViewFilter('fw')" class="px-3 py-1.5 rounded-md font-medium transition-all text-slate-400 hover:text-purple-400">Framework</button>
+        </div>
+
+        <button onclick="window.print()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition">
+          <i class="fa-solid fa-print"></i>
+          <span class="hidden sm:inline">Print / PDF</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-12">
+
+    <!-- HERO SECTION & DEFINITIONS -->
+    <section class="space-y-8">
+      <div class="text-center space-y-4 max-w-4xl mx-auto">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-xs font-semibold text-slate-300">
+          <span class="flex h-2 w-2 rounded-full bg-cyan-400 animate-ping"></span>
+          Architectural Paradigm Comparison
+        </div>
+        <h1 class="text-3xl sm:text-5xl font-black tracking-tight text-white leading-tight">
+          Library <span class="text-slate-500 font-light">vs.</span> Framework
+          <span class="block text-xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 mt-1">
+            Architectural Deep-Dive Infographic
+          </span>
+        </h1>
+        <p class="text-slate-400 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+          Understanding the fundamental distinction in software engineering: control flow, architectural boundaries, dependency direction, and technology choices.
+        </p>
+      </div>
+
+      <!-- DEFINITIONS CARDS -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- LIBRARY CARD -->
+        <div id="card-lib-def" class="target-lib relative group bg-slate-900/90 rounded-2xl p-6 sm:p-8 border border-slate-800 hover:border-cyan-500/50 transition-all duration-300 glow-lib overflow-hidden">
+          <div class="absolute -right-10 -top-10 w-40 h-40 bg-cyan-500/10 rounded-full blur-3xl group-hover:bg-cyan-500/20 transition-all"></div>
+          
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 text-xl font-bold">
+                <i class="fa-solid fa-toolbox"></i>
+              </div>
+              <div>
+                <span class="text-xs font-mono uppercase tracking-widest text-cyan-400 font-bold">Tool Set</span>
+                <h2 class="text-2xl font-black text-white">Library</h2>
+              </div>
+            </div>
+            <span class="px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/20 text-xs font-mono font-semibold">
+              Developer Controls Flow
+            </span>
+          </div>
+
+          <div class="space-y-4">
+            <h3 class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Definition</h3>
+            <p class="text-slate-200 text-sm sm:text-base leading-relaxed bg-slate-950/60 p-4 rounded-xl border border-slate-800/80 font-normal">
+              A collection of pre-written functions, classes, modules, or routines aimed at solving a specific, localized task. It acts as a set of specialized tools that you import into your existing codebase to call whenever you need them.
+            </p>
+            <div class="flex items-center gap-2 text-xs font-mono text-cyan-400/90 pt-2">
+              <i class="fa-solid fa-terminal text-cyan-400"></i>
+              <span>Your Code ➔ Calls ➔ Library Function</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- FRAMEWORK CARD -->
+        <div id="card-fw-def" class="target-fw relative group bg-slate-900/90 rounded-2xl p-6 sm:p-8 border border-slate-800 hover:border-purple-500/50 transition-all duration-300 glow-fw overflow-hidden">
+          <div class="absolute -right-10 -top-10 w-40 h-40 bg-purple-500/10 rounded-full blur-3xl group-hover:bg-purple-500/20 transition-all"></div>
+          
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 text-xl font-bold">
+                <i class="fa-solid fa-sitemap"></i>
+              </div>
+              <div>
+                <span class="text-xs font-mono uppercase tracking-widest text-purple-400 font-bold">Blueprint</span>
+                <h2 class="text-2xl font-black text-white">Framework</h2>
+              </div>
+            </div>
+            <span class="px-3 py-1 rounded-full bg-purple-500/10 text-purple-300 border border-purple-500/20 text-xs font-mono font-semibold">
+              Inversion of Control (IoC)
+            </span>
+          </div>
+
+          <div class="space-y-4">
+            <h3 class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Definition</h3>
+            <p class="text-slate-200 text-sm sm:text-base leading-relaxed bg-slate-950/60 p-4 rounded-xl border border-slate-800/80 font-normal">
+              A comprehensive, opinionated architectural blueprint and runtime foundation for building an entire application. It provides a full skeleton, pre-defining the architecture, routing, workflow, and lifecycle of your application.
+            </p>
+            <div class="flex items-center gap-2 text-xs font-mono text-purple-400/90 pt-2">
+              <i class="fa-solid fa-terminal text-purple-400"></i>
+              <span>Framework Engine ➔ Invokes ➔ Your Code</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: VISUAL CONTROL FLOW DIAGRAM (IoC) -->
+    <section class="bg-slate-900/60 rounded-3xl p-6 sm:p-8 border border-slate-800 space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+        <div>
+          <div class="flex items-center gap-2 text-xs font-mono text-amber-400 font-semibold">
+            <i class="fa-solid fa-arrows-split-up-and-left"></i>
+            CORE CONCEPT
+          </div>
+          <h2 class="text-xl sm:text-2xl font-extrabold text-white">Visual Control Flow Diagram (Inversion of Control)</h2>
+        </div>
+        <div class="text-xs text-slate-400 bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-800 max-w-xs">
+          <i class="fa-solid fa-quote-left text-slate-500 mr-1"></i>
+          <span class="italic">The "Hollywood Principle": Don't call us, we'll call you.</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- LIBRARY FLOW DIAGRAM -->
+        <div id="flow-lib" class="target-lib bg-slate-950/80 rounded-2xl p-6 border border-cyan-500/30 space-y-4 relative">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-sm font-bold text-cyan-400 flex items-center gap-2">
+              <i class="fa-solid fa-microchip"></i> Library Control Flow
+            </span>
+            <span class="text-xs bg-cyan-950 text-cyan-300 border border-cyan-800 px-2.5 py-0.5 rounded-full font-mono">You drive execution</span>
+          </div>
+
+          <!-- Flow Boxes -->
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 pb-2">
+            <!-- Box 1 -->
+            <div class="w-full sm:w-1/3 bg-cyan-950/50 border border-cyan-500/40 rounded-xl p-3 text-center">
+              <div class="text-xs text-cyan-400 font-mono font-semibold">STEP 1 & 3</div>
+              <div class="text-sm font-black text-white mt-0.5">[Your Code]</div>
+              <div class="text-[11px] text-slate-400 mt-1">Initiates & handles output</div>
+            </div>
+
+            <!-- Arrow -->
+            <div class="flex sm:flex-col items-center justify-center text-cyan-400">
+              <i class="fa-solid fa-arrow-right sm:hidden text-lg"></i>
+              <i class="fa-solid fa-arrow-right hidden sm:block text-lg"></i>
+              <span class="text-[10px] font-mono text-cyan-300 my-0.5">calls</span>
+            </div>
+
+            <!-- Box 2 -->
+            <div class="w-full sm:w-1/3 bg-slate-900 border border-slate-700 rounded-xl p-3 text-center">
+              <div class="text-xs text-slate-400 font-mono font-semibold">STEP 2</div>
+              <div class="text-sm font-bold text-cyan-300 mt-0.5">[Library Function]</div>
+              <div class="text-[11px] text-slate-400 mt-1">Executes specialized task</div>
+            </div>
+
+            <!-- Arrow Back -->
+            <div class="flex sm:flex-col items-center justify-center text-cyan-400">
+              <i class="fa-solid fa-arrow-right sm:hidden text-lg"></i>
+              <i class="fa-solid fa-arrow-right hidden sm:block text-lg"></i>
+              <span class="text-[10px] font-mono text-cyan-300 my-0.5">returns</span>
+            </div>
+
+            <!-- Box 3 -->
+            <div class="w-full sm:w-1/3 bg-cyan-950/50 border border-cyan-500/40 rounded-xl p-3 text-center">
+              <div class="text-xs text-cyan-400 font-mono font-semibold">OUTPUT</div>
+              <div class="text-sm font-black text-white mt-0.5">[Your Code]</div>
+              <div class="text-[11px] text-slate-400 mt-1">Receives result</div>
+            </div>
+          </div>
+
+          <div class="text-xs text-slate-300 font-mono bg-slate-900 p-3 rounded-lg border border-slate-800">
+            <span class="text-cyan-400 font-bold">Sequence:</span> [Your Code] ─── calls ───► [Library Function] ─── returns output ───► [Your Code]
+          </div>
+        </div>
+
+        <!-- FRAMEWORK FLOW DIAGRAM -->
+        <div id="flow-fw" class="target-fw bg-slate-950/80 rounded-2xl p-6 border border-purple-500/30 space-y-4 relative">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-sm font-bold text-purple-400 flex items-center gap-2">
+              <i class="fa-solid fa-gears"></i> Framework Control Flow
+            </span>
+            <span class="text-xs bg-purple-950 text-purple-300 border border-purple-800 px-2.5 py-0.5 rounded-full font-mono">Framework drives execution</span>
+          </div>
+
+          <!-- Flow Boxes -->
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 pb-2">
+            <!-- Box 1 -->
+            <div class="w-full sm:w-1/3 bg-purple-950/50 border border-purple-500/40 rounded-xl p-3 text-center">
+              <div class="text-xs text-purple-400 font-mono font-semibold">ENGINE</div>
+              <div class="text-sm font-black text-white mt-0.5">[Framework Engine]</div>
+              <div class="text-[11px] text-slate-400 mt-1">Main Loop / Lifecycle</div>
+            </div>
+
+            <!-- Arrow -->
+            <div class="flex sm:flex-col items-center justify-center text-purple-400">
+              <i class="fa-solid fa-arrow-right sm:hidden text-lg"></i>
+              <i class="fa-solid fa-arrow-right hidden sm:block text-lg"></i>
+              <span class="text-[10px] font-mono text-purple-300 my-0.5">invokes</span>
+            </div>
+
+            <!-- Box 2 -->
+            <div class="w-full sm:w-1/3 bg-slate-900 border border-slate-700 rounded-xl p-3 text-center">
+              <div class="text-xs text-slate-400 font-mono font-semibold">HOOK / CALLBACK</div>
+              <div class="text-sm font-bold text-purple-300 mt-0.5">[Your Custom Code]</div>
+              <div class="text-[11px] text-slate-400 mt-1">Plugs into predefined slots</div>
+            </div>
+
+            <!-- Arrow Back -->
+            <div class="flex sm:flex-col items-center justify-center text-purple-400">
+              <i class="fa-solid fa-arrow-right sm:hidden text-lg"></i>
+              <i class="fa-solid fa-arrow-right hidden sm:block text-lg"></i>
+              <span class="text-[10px] font-mono text-purple-300 my-0.5">returns</span>
+            </div>
+
+            <!-- Box 3 -->
+            <div class="w-full sm:w-1/3 bg-purple-950/50 border border-purple-500/40 rounded-xl p-3 text-center">
+              <div class="text-xs text-purple-400 font-mono font-semibold">CONTINUES</div>
+              <div class="text-sm font-black text-white mt-0.5">[Framework Engine]</div>
+              <div class="text-[11px] text-slate-400 mt-1">Resumes app lifecycle</div>
+            </div>
+          </div>
+
+          <div class="text-xs text-slate-300 font-mono bg-slate-900 p-3 rounded-lg border border-slate-800">
+            <span class="text-purple-400 font-bold">Sequence:</span> [Framework Engine] ─── invokes ───► [Your Custom Code/Hooks] ─── returns control ───► [Framework Engine]
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: COMPLETE COMPARISON MATRIX -->
+    <section class="space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-2 text-xs font-mono text-cyan-400 font-semibold">
+            <i class="fa-solid fa-table-list"></i> STEP-BY-STEP COMPARISON
+          </div>
+          <h2 class="text-2xl font-black text-white">Main Points of Comparison</h2>
+        </div>
+        <div class="text-xs text-slate-400">
+          Showing 6 core architectural dimensions
+        </div>
+      </div>
+
+      <div class="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900/80 shadow-2xl">
+        <table class="w-full text-left border-collapse min-w-[700px]">
+          <thead>
+            <tr class="bg-slate-950 text-slate-300 border-b border-slate-800 font-mono text-xs uppercase tracking-wider">
+              <th class="py-4 px-6 font-bold w-1/5">Dimension</th>
+              <th class="py-4 px-6 font-bold w-2/5 text-cyan-400 bg-cyan-950/20 border-l border-slate-800">
+                <i class="fa-solid fa-toolbox mr-1.5"></i> Library
+              </th>
+              <th class="py-4 px-6 font-bold w-2/5 text-purple-400 bg-purple-950/20 border-l border-slate-800">
+                <i class="fa-solid fa-sitemap mr-1.5"></i> Framework
+              </th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800/60 text-sm">
+            <!-- Row 1: Flow of Control -->
+            <tr class="hover:bg-slate-800/30 transition-colors">
+              <td class="py-4 px-6 font-semibold text-slate-200 bg-slate-950/40">
+                <div class="flex items-center gap-2">
+                  <i class="fa-solid fa-arrows-spin text-amber-400"></i>
+                  Flow of Control
+                </div>
+              </td>
+              <td class="py-4 px-6 text-slate-300 border-l border-slate-800/80 bg-cyan-950/5">
+                You call the library. You control the program execution flow.
+              </td>
+              <td class="py-4 px-6 text-slate-300 border-l border-slate-800/80 bg-purple-950/5">
+                The framework calls your code (Inversion of Control).
+              </td>
+            </tr>
+
+            <!-- Row 2: Scope & Size -->
+            <tr class="hover:bg-slate-800/30 transition-colors">
+              <td class="py-4 px-6 font-semibold text-slate-200 bg-slate-950/40">
+                <div class="flex items-center gap-2">
+                  <i class="fa-solid fa-up-right-and-down-left-from-center text-blue-400"></i>
+                  Scope & Size
+                </div>
+              </td>
+              <td class="py-4 px-6 text-slate-300 border-l border-slate-800/80 bg-cyan-950/5">
+                Narrow focus (e.g., parsing dates, hashing passwords, rendering UI).
+              </td>
+              <td class="py-4 px-6 text-slate-300 border-l border-slate-800/80 bg-purple-950/5">
+                Broad ecosystem (handles database ORM, routing, request validation, app lifecycle).
+              </td>
+            </tr>
+
+            <!-- Row 3: Architecture -->
+            <tr class="hover:bg-slate-800/30 transition-colors">
+              <td class="py-4 px-6 font-semibold text-slate-200 bg-slate-950/40">
+                <div class="flex items-center gap-2">
+                  <i class="fa-solid fa-cubes text-emerald-400"></i>
+                  Architecture
+                </div>
+              </td>
+              <td class="py-4 px-6 text-slate-300 border-l border-slate-800/80 bg-cyan-950/5">
+                Architectural freedom. You structure your directories and design patterns however you want.
+              </td>
+              <td class="py-4 px-6 text-slate-300 border-l border-slate-800/80 bg-purple-950/5">
+                Strict conventions. Forces you to adhere to built-in patterns (e.g., MVC, Dependency Injection).
+              </td>
+            </tr>
+
+            <!-- Row 4: Replaceability -->
+            <tr class="hover:bg-slate-800/30 transition-colors">
+              <td class="py-4 px-6 font-semibold text-slate-200 bg-slate-950/40">
+                <div class="flex items-center gap-2">
+                  <i class="fa-solid fa-arrows-rotate text-rose-400"></i>
+                  Replaceability
+                </div>
+              </td>
+              <td class="py-4 px-6 text-slate-300 border-l border-slate-800/80 bg-cyan-950/5">
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 mr-1.5">High</span>
+                Swapping one library for another (e.g., changing Axios to fetch) is relatively easy.
+              </td>
+              <td class="py-4 px-6 text-slate-300 border-l border-slate-800/80 bg-purple-950/5">
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/20 mr-1.5">Low</span>
+                Replacing a framework usually requires completely rewriting the application.
+              </td>
+            </tr>
+
+            <!-- Row 5: Learning Curve -->
+            <tr class="hover:bg-slate-800/30 transition-colors">
+              <td class="py-4 px-6 font-semibold text-slate-200 bg-slate-950/40">
+                <div class="flex items-center gap-2">
+                  <i class="fa-solid fa-graduation-cap text-purple-400"></i>
+                  Learning Curve
+                </div>
+              </td>
+              <td class="py-4 px-6 text-slate-300 border-l border-slate-800/80 bg-cyan-950/5">
+                Low to Moderate. You only need to learn specific APIs for the task at hand.
+              </td>
+              <td class="py-4 px-6 text-slate-300 border-l border-slate-800/80 bg-purple-950/5">
+                Higher. You must learn the framework's entire philosophy, configuration, directory rules, and lifecycles.
+              </td>
+            </tr>
+
+            <!-- Row 6: Flexibility -->
+            <tr class="hover:bg-slate-800/30 transition-colors">
+              <td class="py-4 px-6 font-semibold text-slate-200 bg-slate-950/40">
+                <div class="flex items-center gap-2">
+                  <i class="fa-solid fa-sliders text-cyan-400"></i>
+                  Flexibility
+                </div>
+              </td>
+              <td class="py-4 px-6 text-slate-300 border-l border-slate-800/80 bg-cyan-950/5">
+                High: Easy to swap out or integrate piece-by-piece.
+              </td>
+              <td class="py-4 px-6 text-slate-300 border-l border-slate-800/80 bg-purple-950/5">
+                Low (Opinionated): Strict conventions; you must follow its specific patterns.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SECTION 4: ROLES & BENEFITS GRID -->
+    <section class="space-y-6">
+      <div class="border-b border-slate-800 pb-4">
+        <div class="flex items-center gap-2 text-xs font-mono text-purple-400 font-semibold">
+          <i class="fa-solid fa-circle-nodes"></i> FUNCTIONALITY & ADVANTAGES
+        </div>
+        <h2 class="text-2xl font-black text-white">What Everyone Does Specifically & How They Help Us</h2>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        
+        <!-- LIBRARY COLUMN -->
+        <div id="col-lib-benefits" class="target-lib space-y-6">
+          <div class="bg-cyan-950/20 border border-cyan-500/30 rounded-2xl p-6 space-y-6">
+            <div class="flex items-center gap-3 border-b border-cyan-500/20 pb-4">
+              <div class="w-10 h-10 rounded-lg bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-300 font-bold text-lg">
+                <i class="fa-solid fa-screwdriver-wrench"></i>
+              </div>
+              <div>
+                <h3 class="text-xl font-extrabold text-white">Library Deep Dive</h3>
+                <p class="text-xs text-cyan-400 font-mono">Tasks & Engineering Benefits</p>
+              </div>
+            </div>
+
+            <!-- What a Library Does -->
+            <div class="space-y-3">
+              <h4 class="text-xs font-mono uppercase tracking-wider text-cyan-400 font-bold flex items-center gap-2">
+                <i class="fa-solid fa-gears"></i> What a Library Does:
+              </h4>
+              <ul class="space-y-2.5">
+                <li class="flex items-start gap-3 bg-slate-900/80 p-3.5 rounded-xl border border-slate-800 text-sm text-slate-200">
+                  <i class="fa-solid fa-circle-check text-cyan-400 mt-1 shrink-0"></i>
+                  <span>Solves one specific problem very well (e.g., mathematical operations, network requests, data manipulation).</span>
+                </li>
+                <li class="flex items-start gap-3 bg-slate-900/80 p-3.5 rounded-xl border border-slate-800 text-sm text-slate-200">
+                  <i class="fa-solid fa-circle-check text-cyan-400 mt-1 shrink-0"></i>
+                  <span>Returns output directly to your code when invoked.</span>
+                </li>
+              </ul>
+            </div>
+
+            <!-- How a Library Helps Us -->
+            <div class="space-y-3 pt-2">
+              <h4 class="text-xs font-mono uppercase tracking-wider text-cyan-400 font-bold flex items-center gap-2">
+                <i class="fa-solid fa-hand-holding-heart"></i> How a Library Helps Us:
+              </h4>
+              <ul class="space-y-2.5">
+                <li class="flex items-start gap-3 bg-slate-900/80 p-3.5 rounded-xl border border-slate-800 text-sm text-slate-200">
+                  <i class="fa-solid fa-shield-halved text-cyan-400 mt-1 shrink-0"></i>
+                  <span><strong>Prevents reinventing the wheel:</strong> Instead of writing complex algorithms from scratch (like cryptographic hashing or parsing XML), you use a battle-tested implementation.</span>
+                </li>
+                <li class="flex items-start gap-3 bg-slate-900/80 p-3.5 rounded-xl border border-slate-800 text-sm text-slate-200">
+                  <i class="fa-solid fa-feather text-cyan-400 mt-1 shrink-0"></i>
+                  <span><strong>Keeps code lightweight:</strong> You only include and execute the specific utilities your project needs without adding overhead.</span>
+                </li>
+                <li class="flex items-start gap-3 bg-slate-900/80 p-3.5 rounded-xl border border-slate-800 text-sm text-slate-200">
+                  <i class="fa-solid fa-wand-magic-sparkles text-cyan-400 mt-1 shrink-0"></i>
+                  <span><strong>Provides maximum freedom:</strong> You can integrate a library into any existing software system regardless of how it was originally designed.</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- FRAMEWORK COLUMN -->
+        <div id="col-fw-benefits" class="target-fw space-y-6">
+          <div class="bg-purple-950/20 border border-purple-500/30 rounded-2xl p-6 space-y-6">
+            <div class="flex items-center gap-3 border-b border-purple-500/20 pb-4">
+              <div class="w-10 h-10 rounded-lg bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-300 font-bold text-lg">
+                <i class="fa-solid fa-layer-group"></i>
+              </div>
+              <div>
+                <h3 class="text-xl font-extrabold text-white">Framework Deep Dive</h3>
+                <p class="text-xs text-purple-400 font-mono">Infrastructure & Engineering Benefits</p>
+              </div>
+            </div>
+
+            <!-- What a Framework Does -->
+            <div class="space-y-3">
+              <h4 class="text-xs font-mono uppercase tracking-wider text-purple-400 font-bold flex items-center gap-2">
+                <i class="fa-solid fa-gears"></i> What a Framework Does:
+              </h4>
+              <ul class="space-y-2.5">
+                <li class="flex items-start gap-3 bg-slate-900/80 p-3.5 rounded-xl border border-slate-800 text-sm text-slate-200">
+                  <i class="fa-solid fa-circle-check text-purple-400 mt-1 shrink-0"></i>
+                  <span>Sets up the application engine and structural boundaries.</span>
+                </li>
+                <li class="flex items-start gap-3 bg-slate-900/80 p-3.5 rounded-xl border border-slate-800 text-sm text-slate-200">
+                  <i class="fa-solid fa-circle-check text-purple-400 mt-1 shrink-0"></i>
+                  <span>Handles background tasks automatically, such as HTTP server listeners, lifecycle events, state management, and request dispatching.</span>
+                </li>
+                <li class="flex items-start gap-3 bg-slate-900/80 p-3.5 rounded-xl border border-slate-800 text-sm text-slate-200">
+                  <i class="fa-solid fa-circle-check text-purple-400 mt-1 shrink-0"></i>
+                  <span>Defines pre-set slots (hooks, methods, abstract classes) where your custom business logic must be placed.</span>
+                </li>
+              </ul>
+            </div>
+
+            <!-- How a Framework Helps Us -->
+            <div class="space-y-3 pt-2">
+              <h4 class="text-xs font-mono uppercase tracking-wider text-purple-400 font-bold flex items-center gap-2">
+                <i class="fa-solid fa-hand-holding-heart"></i> How a Framework Helps Us:
+              </h4>
+              <ul class="space-y-2.5">
+                <li class="flex items-start gap-3 bg-slate-900/80 p-3.5 rounded-xl border border-slate-800 text-sm text-slate-200">
+                  <i class="fa-solid fa-rocket text-purple-400 mt-1 shrink-0"></i>
+                  <span><strong>Accelerates full-stack development:</strong> Eliminates thousands of lines of boilerplate setup code (routing, session handling, database connections).</span>
+                </li>
+                <li class="flex items-start gap-3 bg-slate-900/80 p-3.5 rounded-xl border border-slate-800 text-sm text-slate-200">
+                  <i class="fa-solid fa-users text-purple-400 mt-1 shrink-0"></i>
+                  <span><strong>Enforces consistency:</strong> When working in team environments, every developer follows the exact same folder structures and standards dictated by the framework.</span>
+                </li>
+                <li class="flex items-start gap-3 bg-slate-900/80 p-3.5 rounded-xl border border-slate-800 text-sm text-slate-200">
+                  <i class="fa-solid fa-lock text-purple-400 mt-1 shrink-0"></i>
+                  <span><strong>Provides built-in security & optimization:</strong> Frameworks come pre-configured with protection against common security risks (CSRF, XSS, SQL Injection) out of the box.</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION 5: EXAMPLES ACROSS DIFFERENT TECHNOLOGIES -->
+    <section class="space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+        <div>
+          <div class="flex items-center gap-2 text-xs font-mono text-emerald-400 font-semibold">
+            <i class="fa-solid fa-laptop-code"></i> ECOSYSTEM ECOSYSTEMS
+          </div>
+          <h2 class="text-2xl font-black text-white">Examples Across Different Technologies</h2>
+        </div>
+        
+        <!-- Filter Tabs for Tech -->
+        <div class="flex flex-wrap gap-1.5 no-print text-xs">
+          <button onclick="filterTech('all')" class="tech-tab active px-3 py-1.5 rounded-lg bg-slate-800 text-white font-medium hover:bg-slate-700 transition">All Ecosystems</button>
+          <button onclick="filterTech('css')" class="tech-tab px-3 py-1.5 rounded-lg bg-slate-900 text-slate-400 font-medium hover:bg-slate-800 transition">CSS</button>
+          <button onclick="filterTech('js')" class="tech-tab px-3 py-1.5 rounded-lg bg-slate-900 text-slate-400 font-medium hover:bg-slate-800 transition">JavaScript</button>
+          <button onclick="filterTech('java')" class="tech-tab px-3 py-1.5 rounded-lg bg-slate-900 text-slate-400 font-medium hover:bg-slate-800 transition">Java</button>
+          <button onclick="filterTech('php')" class="tech-tab px-3 py-1.5 rounded-lg bg-slate-900 text-slate-400 font-medium hover:bg-slate-800 transition">PHP</button>
+          <button onclick="filterTech('python')" class="tech-tab px-3 py-1.5 rounded-lg bg-slate-900 text-slate-400 font-medium hover:bg-slate-800 transition">Python</button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="tech-grid">
+
+        <!-- CSS CARD -->
+        <div class="tech-card css-card bg-slate-900/90 rounded-2xl p-6 border border-slate-800 space-y-4 hover:border-cyan-500/40 transition-all">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <i class="fa-brands fa-css3-alt text-2xl text-blue-400"></i>
+              <h3 class="text-lg font-black text-white">CSS</h3>
+            </div>
+            <span class="text-xs font-mono text-slate-400 bg-slate-950 px-2.5 py-1 rounded-md border border-slate-800">Styling</span>
+          </div>
+
+          <!-- Libraries -->
+          <div class="bg-cyan-950/20 border border-cyan-500/30 rounded-xl p-3.5 space-y-2">
+            <span class="text-xs font-mono font-bold text-cyan-400 flex items-center gap-1.5">
+              <i class="fa-solid fa-toolbox"></i> Library Examples:
+            </span>
+            <ul class="text-xs text-slate-200 space-y-1.5 pl-1">
+              <li class="flex items-center gap-2">
+                <i class="fa-solid fa-angle-right text-cyan-400"></i>
+                <span><strong>Tailwind CSS</strong> (utility classes)</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <i class="fa-solid fa-angle-right text-cyan-400"></i>
+                <span><strong>Animate.css</strong> (animation collection)</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Frameworks -->
+          <div class="bg-purple-950/20 border border-purple-500/30 rounded-xl p-3.5 space-y-2">
+            <span class="text-xs font-mono font-bold text-purple-400 flex items-center gap-1.5">
+              <i class="fa-solid fa-sitemap"></i> Framework Examples:
+            </span>
+            <ul class="text-xs text-slate-200 space-y-1.5 pl-1">
+              <li class="flex items-center gap-2">
+                <i class="fa-solid fa-angle-right text-purple-400"></i>
+                <span><strong>Bootstrap</strong> (grid & layout structure)</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <i class="fa-solid fa-angle-right text-purple-400"></i>
+                <span><strong>Bulma</strong> or <strong>Foundation</strong></span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- JAVASCRIPT CARD -->
+        <div class="tech-card js-card bg-slate-900/90 rounded-2xl p-6 border border-slate-800 space-y-4 hover:border-yellow-500/40 transition-all">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <i class="fa-brands fa-js text-2xl text-yellow-400"></i>
+              <h3 class="text-lg font-black text-white">JavaScript</h3>
+            </div>
+            <span class="text-xs font-mono text-slate-400 bg-slate-950 px-2.5 py-1 rounded-md border border-slate-800">Web/Node</span>
+          </div>
+
+          <!-- Libraries -->
+          <div class="bg-cyan-950/20 border border-cyan-500/30 rounded-xl p-3.5 space-y-2">
+            <span class="text-xs font-mono font-bold text-cyan-400 flex items-center gap-1.5">
+              <i class="fa-solid fa-toolbox"></i> Library Examples:
+            </span>
+            <ul class="text-xs text-slate-200 space-y-1.5 pl-1">
+              <li class="flex items-center gap-2">
+                <i class="fa-solid fa-angle-right text-cyan-400"></i>
+                <span><strong>React.js</strong> (UI component library)</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <i class="fa-solid fa-angle-right text-cyan-400"></i>
+                <span><strong>Lodash</strong> (utility functions)</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <i class="fa-solid fa-angle-right text-cyan-400"></i>
+                <span><strong>Axios</strong> (HTTP requests)</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Frameworks -->
+          <div class="bg-purple-950/20 border border-purple-500/30 rounded-xl p-3.5 space-y-2">
+            <span class="text-xs font-mono font-bold text-purple-400 flex items-center gap-1.5">
+              <i class="fa-solid fa-sitemap"></i> Framework Examples:
+            </span>
+            <ul class="text-xs text-slate-200 space-y-1.5 pl-1">
+              <li class="flex items-center gap-2">
+                <i class="fa-solid fa-angle-right text-purple-400"></i>
+                <span><strong>Angular</strong> (full-scale MVC framework)</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <i class="fa-solid fa-angle-right text-purple-400"></i>
+                <span><strong>Vue.js</strong> (progressive framework)</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <i class="fa-solid fa-angle-right text-purple-400"></i>
+                <span><strong>Next.js</strong> (full-stack web framework)</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- JAVA CARD -->
+        <div class="tech-card java-card bg-slate-900/90 rounded-2xl p-6 border border-slate-800 space-y-4 hover:border-orange-500/40 transition-all">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <i class="fa-brands fa-java text-2xl text-orange-400"></i>
+              <h3 class="text-lg font-black text-white">Java</h3>
+            </div>
+            <span class="text-xs font-mono text-slate-400 bg-slate-950 px-2.5 py-1 rounded-md border border-slate-800">Enterprise</span>
+          </div>
+
+          <!-- Libraries -->
+          <div class="bg-cyan-950/20 border border-cyan-500/30 rounded-xl p-3.5 space-y-2">
+            <span class="text-xs font-mono font-bold text-cyan-400 flex items-center gap-1.5">
+              <i class="fa-solid fa-toolbox"></i> Library Examples:
+            </span>
+            <ul class="text-xs text-slate-200 space-y-1.5 pl-1">
+              <li class="flex items-center gap-2">
+                <i class="fa-solid fa-angle-right text-cyan-400"></i>
+                <span><strong>Gson / Jackson</strong> (JSON parsing)</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <i class="fa-solid fa-angle-right text-cyan-400"></i>
+                <span><strong>Apache Commons</strong> (utility classes)</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Frameworks -->
+          <div class="bg-purple-950/20 border border-purple-500/30 rounded-xl p-3.5 space-y-2">
+            <span class="text-xs font-mono font-bold text-purple-400 flex items-center gap-1.5">
+              <i class="fa-solid fa-sitemap"></i> Framework Examples:
+            </span>
+            <ul class="text-xs text-slate-200 space-y-1.5 pl-1">
+              <li class="flex items-center gap-2">
+                <i class="fa-solid fa-angle-right text-purple-400"></i>
+                <span><strong>Spring Boot</strong> (enterprise application framework)</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <i class="fa-solid fa-angle-right text-purple-400"></i>
+                <span><strong>Hibernate</strong> (ORM framework)</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- PHP CARD -->
+        <div class="tech-card php-card bg-slate-900/90 rounded-2xl p-6 border border-slate-800 space-y-4 hover:border-indigo-500/40 transition-all">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <i class="fa-brands fa-php text-2xl text-indigo-400"></i>
+              <h3 class="text-lg font-black text-white">PHP</h3>
+            </div>
+            <span class="text-xs font-mono text-slate-400 bg-slate-950 px-2.5 py-1 rounded-md border border-slate-800">Backend</span>
+          </div>
+
+          <!-- Libraries -->
+          <div class="bg-cyan-950/20 border border-cyan-500/30 rounded-xl p-3.5 space-y-2">
+            <span class="text-xs font-mono font-bold text-cyan-400 flex items-center gap-1.5">
+              <i class="fa-solid fa-toolbox"></i> Library Examples:
+            </span>
+            <ul class="text-xs text-slate-200 space-y-1.5 pl-1">
+              <li class="flex items-center gap-2">
+                <i class="fa-solid fa-angle-right text-cyan-400"></i>
+                <span><strong>Carbon</strong> (date/time manipulation)</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <i class="fa-solid fa-angle-right text-cyan-400"></i>
+                <span><strong>Guzzle</strong> (HTTP client)</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Frameworks -->
+          <div class="bg-purple-950/20 border border-purple-500/30 rounded-xl p-3.5 space-y-2">
+            <span class="text-xs font-mono font-bold text-purple-400 flex items-center gap-1.5">
+              <i class="fa-solid fa-sitemap"></i> Framework Examples:
+            </span>
+            <ul class="text-xs text-slate-200 space-y-1.5 pl-1">
+              <li class="flex items-center gap-2">
+                <i class="fa-solid fa-angle-right text-purple-400"></i>
+                <span><strong>Laravel</strong> (full-stack MVC framework)</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <i class="fa-solid fa-angle-right text-purple-400"></i>
+                <span><strong>Symfony</strong> (enterprise web framework)</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- PYTHON CARD -->
+        <div class="tech-card python-card bg-slate-900/90 rounded-2xl p-6 border border-slate-800 space-y-4 hover:border-emerald-500/40 transition-all">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <i class="fa-brands fa-python text-2xl text-emerald-400"></i>
+              <h3 class="text-lg font-black text-white">Python</h3>
+            </div>
+            <span class="text-xs font-mono text-slate-400 bg-slate-950 px-2.5 py-1 rounded-md border border-slate-800">Data/Web</span>
+          </div>
+
+          <!-- Libraries -->
+          <div class="bg-cyan-950/20 border border-cyan-500/30 rounded-xl p-3.5 space-y-2">
+            <span class="text-xs font-mono font-bold text-cyan-400 flex items-center gap-1.5">
+              <i class="fa-solid fa-toolbox"></i> Library Examples:
+            </span>
+            <ul class="text-xs text-slate-200 space-y-1.5 pl-1">
+              <li class="flex items-center gap-2">
+                <i class="fa-solid fa-angle-right text-cyan-400"></i>
+                <span><strong>NumPy / Pandas</strong> (data science utilities)</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <i class="fa-solid fa-angle-right text-cyan-400"></i>
+                <span><strong>Requests</strong> (HTTP requests)</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Frameworks -->
+          <div class="bg-purple-950/20 border border-purple-500/30 rounded-xl p-3.5 space-y-2">
+            <span class="text-xs font-mono font-bold text-purple-400 flex items-center gap-1.5">
+              <i class="fa-solid fa-sitemap"></i> Framework Examples:
+            </span>
+            <ul class="text-xs text-slate-200 space-y-1.5 pl-1">
+              <li class="flex items-center gap-2">
+                <i class="fa-solid fa-angle-right text-purple-400"></i>
+                <span><strong>Django</strong> (batteries-included web framework)</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <i class="fa-solid fa-angle-right text-purple-400"></i>
+                <span><strong>Flask</strong> (micro-framework / web framework)</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- FOOTER SUMMARY / METRIC -->
+    <footer class="pt-8 border-t border-slate-800 text-center space-y-3">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-xs text-slate-400">
+        <i class="fa-solid fa-lightbulb text-amber-400"></i>
+        Key Takeaway: Libraries offer specialized modularity; Frameworks provide structured application architecture.
+      </div>
+      <p class="text-xs text-slate-400">
+        Library vs. Framework Architectural Deep-Dive Infographic Dashboard • Complete Unabridged Text Edition
+      </p>
+    </footer>
+
+  </main>
+
+  <script>
+    // Filter functions for Library vs Framework view
+    function setViewFilter(mode) {
+      const libCards = document.querySelectorAll('.target-lib');
+      const fwCards = document.querySelectorAll('.target-fw');
+      
+      const btnAll = document.getElementById('view-all-btn');
+      const btnLib = document.getElementById('view-lib-btn');
+      const btnFw = document.getElementById('view-fw-btn');
+
+      // Reset button styles
+      [btnAll, btnLib, btnFw].forEach(b => {
+        b.className = "px-3 py-1.5 rounded-md font-medium transition-all text-slate-400 hover:text-white";
+      });
+
+      if (mode === 'all') {
+        btnAll.className = "px-3 py-1.5 rounded-md font-medium transition-all bg-slate-800 text-white shadow-sm";
+        libCards.forEach(c => c.style.display = 'block');
+        fwCards.forEach(c => c.style.display = 'block');
+      } else if (mode === 'lib') {
+        btnLib.className = "px-3 py-1.5 rounded-md font-medium transition-all bg-cyan-950 text-cyan-300 border border-cyan-800 shadow-sm";
+        libCards.forEach(c => c.style.display = 'block');
+        fwCards.forEach(c => c.style.display = 'none');
+      } else if (mode === 'fw') {
+        btnFw.className = "px-3 py-1.5 rounded-md font-medium transition-all bg-purple-950 text-purple-300 border border-purple-800 shadow-sm";
+        libCards.forEach(c => c.style.display = 'none');
+        fwCards.forEach(c => c.style.display = 'block');
+      }
+    }
+
+    // Technology ecosystem tab filtering
+    function filterTech(tech) {
+      const cards = document.querySelectorAll('.tech-card');
+      const tabs = document.querySelectorAll('.tech-tab');
+
+      tabs.forEach(t => {
+        t.classList.remove('bg-slate-800', 'text-white');
+        t.classList.add('bg-slate-900', 'text-slate-400');
+      });
+
+      // Highlight target tab
+      event.target.classList.remove('bg-slate-900', 'text-slate-400');
+      event.target.classList.add('bg-slate-800', 'text-white');
+
+      cards.forEach(card => {
+        if (tech === 'all' || card.classList.contains(`${tech}-card`)) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+  </script>
+</body>
+</html>
