@@ -7,22 +7,19 @@ void dump_hex(FILE *fp) {
     size_t n;
     unsigned long addr = 0;
 
-    // Read file chunks of 16 bytes until EOF
     while ((n = fread(buf, 1, sizeof(buf), fp)) > 0) {
         printf("%08lX: ", addr);
 
-        // Print hex values
         for (int i = 0; i < 16; i++) {
             if (i < n) {
                 printf("%02X ", buf[i]);
             } else {
-                printf("   "); // padding for last incomplete row
+                printf("   ");
             }
         }
 
         printf(" |");
 
-        // Print ASCII equivalents
         for (int i = 0; i < n; i++) {
             if (buf[i] >= 32 && buf[i] <= 126) {
                 printf("%c", buf[i]);
