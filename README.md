@@ -1,8 +1,13 @@
 # Security Bootcamp Repo with Eng. Mahmoud Emara
 ---
-**This Repository conatain the assignments of this bootcamp**
-## List of assignments:
+**This Repository contains all the assignments of the bootcamp**
 
+## Description:
+A comprehensive collection of 14 practical cybersecurity assignments covering systems programming in C, network reconnaissance and log analysis in Python, secure web development practices in PHP, and client-side security in JavaScript. This repository serves as a structured, hands-on portfolio demonstrating deep proficiency across multiple layers of application security, low-level binary manipulation, network threat detection, defensive coding strategies, incident response monitoring, and modern web application hardening techniques.
+
+---
+
+## List of assignments:
 
 #### 1. C Password Checker:
 
