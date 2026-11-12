@@ -1,5 +1,3 @@
----
-
 ### Security Bootcamp Repo
 
 **This Repository contains the assignments of this bootcamp**
@@ -14,10 +12,7 @@
 
 #### 2. Framework and Library Research:
 
-> [!TIP]
-> **`I used Obsidian to create this PDF`**.
-
-[Framework and Library](https://www.google.com/search?q=https://github.com/AbdulhadiAlahdal/BootCamp-A1/tree/main/Library%2520and%2520Framework%2520Comparison)
+[Framework and Library](https://github.com/AbdulhadiAlahdal/BootCamp-A1/tree/main/Library%2520and%2520Framework%2520Comparison)
 
 ---
 
@@ -65,28 +60,30 @@
 
 #### 10. PHP HTTP Request Handler & REST API Builder
 
-[REST API](https://www.google.com/search?q=https://github.com/AbdulhadiAlahdal/BootCamp-A1/tree/main/HTTP%2520Request%2520Handler%2520%2526%2520REST%2520API%2520Builder)
+[REST API](https://github.com/AbdulhadiAlahdal/BootCamp-A1/tree/main/HTTP%2520Request%2520Handler%2520%2526%2520REST%2520API%2520Builder)
 
 ---
 
 #### 11. PHP SQL Injection Defense Tool
 
-[SQLi Defense](https://www.google.com/search?q=https://github.com/AbdulhadiAlahdal/BootCamp-A1/tree/main/SQL%2520Injection%2520Defense)
+[SQLi Defense](https://github.com/AbdulhadiAlahdal/BootCamp-A1/tree/main/SQL%2520Injection%2520Defense)
 
 ---
 
 #### 12. PHP Secure File Upload System
 
-[Secure Upload](https://www.google.com/search?q=https://github.com/AbdulhadiAlahdal/BootCamp-A1/tree/main/Secure%2520File%2520Upload%2520System)
+[Secure Upload](https://github.com/AbdulhadiAlahdal/BootCamp-A1/tree/main/Secure%2520File%2520Upload%2520System)
 
 ---
 
 #### 13. PHP Secure Session & Cookie Management
 
-[Secure Session](https://www.google.com/search?q=https://github.com/AbdulhadiAlahdal/BootCamp-A1/tree/main/Secure%2520Session%2520%2526%2520Cookie%2520Management)
+[Secure Session](https://github.com/AbdulhadiAlahdal/BootCamp-A1/tree/main/Secure%2520Session%2520%2526%2520Cookie%2520Management)
 
 ---
 
 #### 14. JavaScript DOM Interaction & XSS Prevention
 
-[XSS Prevention](https://www.google.com/search?q=https://github.com/AbdulhadiAlahdal/BootCamp-A1/tree/main/DOM%2520Interaction%2520%2526%2520XSS%2520Prevention)
+[XSS Prevention](https://github.com/AbdulhadiAlahdal/BootCamp-A1/tree/main/DOM%2520Interaction%2520%2526%2520XSS%2520Prevention)
+
+---
