@@ -87,3 +87,5 @@
 [XSS Prevention](https://github.com/AbdulhadiAlahdal/BootCamp-A1/tree/main/DOM%20Interaction%20%26%20XSS%20Prevention%20Tool)
 
 ---
+
+#### Author: Abdulhadi Al-Ahdal
