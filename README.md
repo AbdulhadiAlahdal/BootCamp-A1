@@ -1,11 +1,14 @@
-# Security Bootcamp Repo with Eng. Mahmoud Emara
 ---
-**This Repository conatain the assignments of this bootcamp**
+
+### Security Bootcamp Repo
+
+**This Repository contains the assignments of this bootcamp**
+
 ## List of assignments:
 
 #### 1. C Password Checker:
 
-[Password Checker](http://github.com/OmarBjjash/Sec_bootcamp/tree/main/1.Assignment_password-checker)
+[Password Checker](https://github.com/AbdulhadiAlahdal/BootCamp-A1/tree/main/password-strength-checker)
 
 ---
 
@@ -14,76 +17,76 @@
 > [!TIP]
 > **`I used Obsidian to create this PDF`**.
 
-[Framework and Library](https://github.com/OmarBjjash/Sec_bootcamp/blob/main/2.Assignment_framework_and_library/2.framework_and_library.pdf)
+[Framework and Library](https://www.google.com/search?q=https://github.com/AbdulhadiAlahdal/BootCamp-A1/tree/main/Library%2520and%2520Framework%2520Comparison)
 
 ---
 
 #### 3. C Hexadecimal Viewer:
 
-[Hexadecimal Viewer](https://github.com/OmarBjjash/Sec_bootcamp/tree/main/3.Assignment_Hexadecimal-Viewer)
+[Hexadecimal Viewer](https://github.com/AbdulhadiAlahdal/BootCamp-A1/tree/main/Hexadecimal%20Viewer)
 
 ---
 
 #### 4. C Log Parser:
 
-[Hexadecimal Viewer](https://github.com/OmarBjjash/Sec_bootcamp/tree/main/4.Assignment_Log_parse)
+[Log Parser](https://github.com/AbdulhadiAlahdal/BootCamp-A1/tree/main/Log%20File%20Parser)
 
 ---
 
-#### 5. Pyhton Port Scanner
+#### 5. Python Port Scanner
 
-[Port Scanner](https://github.com/OmarBjjash/Sec_bootcamp/tree/main/5.port_scanner)
-
----
-
-#### 6. Pyhton Banner Grabbing Tool
-
-[Banner Grab](https://github.com/OmarBjjash/Sec_bootcamp/tree/main/6.banner_garbbing_tool)
+[Port Scanner](https://github.com/AbdulhadiAlahdal/BootCamp-A1/tree/main/Multithreaded%20Port%20Scanner)
 
 ---
 
-#### 7. Pyhton Log Analyzer
+#### 6. Python Banner Grabbing Tool
 
-[Log Analyzer](https://github.com/OmarBjjash/Sec_bootcamp/tree/main/7.log_analyzer)
-
----
-
-#### 8. Pyhton Password Generator & Hashwer
-
-[Password Generator](https://github.com/OmarBjjash/Sec_bootcamp/tree/main/8.pass_gen)
+[Banner Grab](https://github.com/AbdulhadiAlahdal/BootCamp-A1/tree/main/Service%20Banner%20Grabbing%20Tool)
 
 ---
 
-#### 9. Pyhton File Integrity Monitor (FIM)
+#### 7. Python Log Analyzer
 
-[FIM](https://github.com/OmarBjjash/Sec_bootcamp/tree/main/9.file_integrity_monitor)
+[Log Analyzer](https://github.com/AbdulhadiAlahdal/BootCamp-A1/tree/main/Automated%20Log%20Analyzer%20Tool)
+
+---
+
+#### 8. Python Password Generator & Hasher
+
+[Password Generator](https://github.com/AbdulhadiAlahdal/BootCamp-A1/tree/main/Password%20Generator%20%26%20SHA-256%20Hasher)
+
+---
+
+#### 9. Python File Integrity Monitor (FIM)
+
+[FIM](https://github.com/AbdulhadiAlahdal/BootCamp-A1/tree/main/File%20Integrity%20Monitoring%28FIM%29)
 
 ---
 
 #### 10. PHP HTTP Request Handler & REST API Builder
 
-[REST API](https://github.com/AbdulhadiAlahdal/BootCamp-A1/tree/main/HTTP%20Request%20Handler%20%26%20REST%20API%20Builder)
+[REST API](https://www.google.com/search?q=https://github.com/AbdulhadiAlahdal/BootCamp-A1/tree/main/HTTP%2520Request%2520Handler%2520%2526%2520REST%2520API%2520Builder)
 
 ---
 
 #### 11. PHP SQL Injection Defense Tool
 
-[SQLi Defense](https://github.com/AbdulhadiAlahdal/BootCamp-A1/tree/main/SQL%20Injection%20Defense)
+[SQLi Defense](https://www.google.com/search?q=https://github.com/AbdulhadiAlahdal/BootCamp-A1/tree/main/SQL%2520Injection%2520Defense)
 
 ---
 
 #### 12. PHP Secure File Upload System
 
-[Secure Upload](https://github.com/AbdulhadiAlahdal/BootCamp-A1/tree/main/Secure%20File%20Upload%20System)
+[Secure Upload](https://www.google.com/search?q=https://github.com/AbdulhadiAlahdal/BootCamp-A1/tree/main/Secure%2520File%2520Upload%2520System)
 
 ---
 
 #### 13. PHP Secure Session & Cookie Management
 
-[Secure Session](https://github.com/AbdulhadiAlahdal/BootCamp-A1/tree/main/Secure%20Session%20%26%20Cookie%20Management)
+[Secure Session](https://www.google.com/search?q=https://github.com/AbdulhadiAlahdal/BootCamp-A1/tree/main/Secure%2520Session%2520%2526%2520Cookie%2520Management)
 
 ---
 
 #### 14. JavaScript DOM Interaction & XSS Prevention
 
-[XSS Prevention](https://github.com/AbdulhadiAlahdal/BootCamp-A1/tree/main/DOM%20Interaction%20%26%20XSS%20Prevention)
+[XSS Prevention](https://www.google.com/search?q=https://github.com/AbdulhadiAlahdal/BootCamp-A1/tree/main/DOM%2520Interaction%2520%2526%2520XSS%2520Prevention)
