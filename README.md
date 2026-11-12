@@ -60,7 +60,7 @@
 
 #### 10. PHP HTTP Request Handler & REST API Builder
 
-[REST API](https://github.com/AbdulhadiAlahdal/BootCamp-A1/tree/main/HTTP%2520Request%2520Handler%2520%2526%2520REST%2520API%2520Builder)
+[REST API](https://github.com/AbdulhadiAlahdal/BootCamp-A1/tree/main/HTTP%20Request%20Handler%20%26%20REST%20API%20Builder)
 
 ---
 
