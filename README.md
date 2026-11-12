@@ -66,24 +66,24 @@
 
 #### 11. PHP SQL Injection Defense Tool
 
-[SQLi Defense](https://github.com/AbdulhadiAlahdal/BootCamp-A1/tree/main/SQL%2520Injection%2520Defense)
+[SQLi Defense](https://github.com/AbdulhadiAlahdal/BootCamp-A1/tree/main/SQL%20Injection%20Defense%20Tool)
 
 ---
 
 #### 12. PHP Secure File Upload System
 
-[Secure Upload](https://github.com/AbdulhadiAlahdal/BootCamp-A1/tree/main/Secure%2520File%2520Upload%2520System)
+[Secure Upload](https://github.com/AbdulhadiAlahdal/BootCamp-A1/tree/main/Secure%20File%20Upload%20System)
 
 ---
 
 #### 13. PHP Secure Session & Cookie Management
 
-[Secure Session](https://github.com/AbdulhadiAlahdal/BootCamp-A1/tree/main/Secure%2520Session%2520%2526%2520Cookie%2520Management)
+[Secure Session](https://github.com/AbdulhadiAlahdal/BootCamp-A1/tree/main/Secure%20Session%20%26%20Cookie%20Management%20Tool)
 
 ---
 
 #### 14. JavaScript DOM Interaction & XSS Prevention
 
-[XSS Prevention](https://github.com/AbdulhadiAlahdal/BootCamp-A1/tree/main/DOM%2520Interaction%2520%2526%2520XSS%2520Prevention)
+[XSS Prevention](https://github.com/AbdulhadiAlahdal/BootCamp-A1/tree/main/DOM%20Interaction%20%26%20XSS%20Prevention%20Tool)
 
 ---
