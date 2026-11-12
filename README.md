@@ -12,7 +12,7 @@
 
 #### 2. Framework and Library Research:
 
-[Framework and Library](https://github.com/AbdulhadiAlahdal/BootCamp-A1/tree/main/Library%2520and%2520Framework%2520Comparison)
+[Framework and Library](https://github.com/AbdulhadiAlahdal/BootCamp-A1/tree/main/Library%20and%20Framewrok%20Comparison)
 
 ---
 
